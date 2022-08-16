@@ -25,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-   public static  String BASE_URL = "http://10.0.2.2:8000/";
+   public static  String BASE_URL = "http://192.168.1.105:8000/";
     public static  String CACHE_BASE_URL = AppSharedPreferences.GET_BASE_URL();
 
 

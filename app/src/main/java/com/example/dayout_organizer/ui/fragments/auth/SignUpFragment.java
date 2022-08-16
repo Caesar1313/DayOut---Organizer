@@ -23,6 +23,7 @@ import androidx.lifecycle.Observer;
 
 import com.example.dayout_organizer.R;
 import com.example.dayout_organizer.config.AppConstants;
+import com.example.dayout_organizer.helpers.system.HttpRequestConverter;
 import com.example.dayout_organizer.helpers.system.PermissionsHelper;
 import com.example.dayout_organizer.helpers.view.ConverterImage;
 import com.example.dayout_organizer.helpers.view.FN;
@@ -36,10 +37,13 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.JsonObject;
 
+import java.io.File;
 import java.util.regex.Matcher;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.example.dayout_organizer.config.AppConstants.AUTH_FRC;
 
@@ -108,7 +112,8 @@ public class SignUpFragment extends Fragment {
 
     View view;
 
-    String imageAsString;
+    Uri credentialPhoto;
+
 
     LoadingDialog loadingDialog;
 
@@ -119,7 +124,7 @@ public class SignUpFragment extends Fragment {
         ButterKnife.bind(this, view);
         initViews();
 
-        if (imageAsString != null)
+        if (credentialPhoto != null)
             adjustVisibilities();
 
         return view;
@@ -147,14 +152,11 @@ public class SignUpFragment extends Fragment {
     private final ActivityResultLauncher<String> launcher = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>() {
         @Override
         public void onActivityResult(Uri result) {
-            imageAsString = ConverterImage.convertUriToBase64(requireContext(), result);
-            if (imageAsString != null)
+            credentialPhoto = result;
+            if (credentialPhoto != null)
                 adjustVisibilities();
         }
     });
-
-    public SignUpFragment() {
-    }
 
     private void adjustVisibilities() {
         upload_image_button.setVisibility(View.GONE);
@@ -174,21 +176,15 @@ public class SignUpFragment extends Fragment {
         return firstNameValidation && lastNameValidation && passwordValidation && emailValidation && phoneNumberValidation && idImageValidation;
     }
 
-    private JsonObject getInfo() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("first_name",firstName.getText().toString());
-        jsonObject.addProperty("last_name",lastName.getText().toString());
-        jsonObject.addProperty("password",password.getText().toString());
-        jsonObject.addProperty("email",signUpEmail.getText().toString());
-        jsonObject.addProperty("credential_photo",imageAsString);
-        if (radioGroup.getCheckedRadioButtonId() == maleRadioButton.getId()) {
-            jsonObject.addProperty("gender","Male");
-        } else if (radioGroup.getCheckedRadioButtonId() == femaleRadioButton.getId()) {
-            jsonObject.addProperty("gender","Female");
-        }
-        jsonObject.addProperty("phone_number", phoneNumber.getText().toString());
+    private RequestBody getRequestBody(String body) {
+        return HttpRequestConverter.createStringAsRequestBody("multipart/form-data", body);
+    }
 
-        return jsonObject;
+    private MultipartBody.Part getPhotoAsRequestBody() {
+        String path = ConverterImage.createImageFilePath(requireActivity(), credentialPhoto);
+        File file = new File(path);
+        RequestBody photoBody = HttpRequestConverter.createFileAsRequestBody("multipart/form-data", file);
+        return HttpRequestConverter.createFormDataFile("credential_photo", file.getName(), photoBody);
     }
 
 
@@ -306,7 +302,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private boolean idImageNotEmpty() {
-        return imageAsString != null;
+        return credentialPhoto != null;
     }
 
     private final View.OnClickListener onSignUpBtnClicked = new View.OnClickListener() {
@@ -314,11 +310,26 @@ public class SignUpFragment extends Fragment {
         public void onClick(View view) {
             if (checkInfo()) {
                 loadingDialog.show();
-                AuthViewModel.getINSTANCE().registerOrganizer(getInfo());
+
+                RequestBody requestBody = getRequestBody("Male");
+                if (radioGroup.getCheckedRadioButtonId() == maleRadioButton.getId()) {
+                    requestBody = getRequestBody("Male");
+                } else if (radioGroup.getCheckedRadioButtonId() == femaleRadioButton.getId()) {
+                    requestBody = getRequestBody("Female");
+                }
+                AuthViewModel.getINSTANCE().registerOrganizer(
+                        getRequestBody(firstName.getText().toString()),
+                        getRequestBody(lastName.getText().toString()),
+                        getRequestBody(signUpEmail.getText().toString()),
+                        getRequestBody(password.getText().toString()),
+                        getRequestBody(phoneNumber.getText().toString()),
+                        requestBody, getPhotoAsRequestBody()
+                );
                 AuthViewModel.getINSTANCE().registerMutableLiveData.observe(requireActivity(), signUpObserver);
             }
         }
     };
+
 
     private final Observer<Pair<ProfileUser, String>> signUpObserver = new Observer<Pair<ProfileUser, String>>() {
         @Override
@@ -340,7 +351,7 @@ public class SignUpFragment extends Fragment {
     private final View.OnClickListener onEditImageClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            imageAsString = null;
+            credentialPhoto = null;
             selectImage();
         }
     };

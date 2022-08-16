@@ -34,8 +34,8 @@
 
                     <ImageButton
                         android:id="@+id/pick_poll_end_date"
-                        android:layout_width="@dimen/_30sdp"
-                        android:layout_height="@dimen/_30sdp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@drawable/ic_clock"
                         android:backgroundTint="@color/orange_500"
                         app:layout_constraintBottom_toBottomOf="parent"

@@ -19,6 +19,7 @@ public class TokenInterceptor implements Interceptor {
         Request newRequest=chain.request().newBuilder()
                 .header("Authorization","Bearer "+GET_ACC_TOKEN())
                 .header("Accept","*/*")
+                .header("Content-Type","application/json")
                 .build();
 
         return chain.proceed(newRequest);

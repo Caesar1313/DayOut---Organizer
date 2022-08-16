@@ -36,4 +36,7 @@ public interface ITrip {
 
     @Query("select * from " + TRIP_DATA +" where id =:tripId")
     Single<TripData> getTripDataById(int tripId);
+
+    @Query("delete from "+TRIP_DATA)
+    Single<Void>   deleteAll();
 }

@@ -21,4 +21,7 @@ public interface IProfileModel {
 
     @Query("select * from " + PROFILE_DATA+" where id = :userId")
     Single<ProfileData> getProfile(int userId);
+
+    @Query("delete from "+PROFILE_DATA)
+    Single<Void>   deleteAll();
 }

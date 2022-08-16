@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import com.example.dayout_organizer.R;
 import com.example.dayout_organizer.helpers.view.FN;
 import com.example.dayout_organizer.helpers.view.NoteMessage;
+import com.example.dayout_organizer.ui.fragments.drawer.PrivacyPolicyFragment;
 import com.example.dayout_organizer.ui.fragments.drawer.SettingsFragment;
 
 import butterknife.BindView;
@@ -61,7 +62,7 @@ public class AuthFragment extends Fragment {
 
     private final View.OnClickListener onPromotionClicked = v -> FN.addFixedNameFadeFragment(AUTH_FRC, requireActivity(), new PromotionFragment());
 
-    private final View.OnClickListener onPrivacyPolicyClicked = v -> NoteMessage.showSnackBar(requireActivity(), getResources().getString(R.string.no_policy));
+    private final View.OnClickListener onPrivacyPolicyClicked = v -> FN.addFixedNameFadeFragment(AUTH_FRC, requireActivity(), new PrivacyPolicyFragment(1));
 
 
 }

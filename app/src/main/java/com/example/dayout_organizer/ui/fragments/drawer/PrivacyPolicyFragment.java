@@ -23,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PrivacyPoliceFragment extends Fragment {
+public class PrivacyPolicyFragment extends Fragment {
 
 
     @BindView(R.id.privacy_policy_txt)
@@ -35,6 +35,10 @@ public class PrivacyPoliceFragment extends Fragment {
     InputStream inputStream;
     BufferedReader reader;
 
+    int type ;
+    public PrivacyPolicyFragment(int type){
+        this.type =type;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -50,8 +54,11 @@ public class PrivacyPoliceFragment extends Fragment {
 
     @Override
     public void onStart() {
-        ((MainActivity)requireActivity()).hideDrawerButton();
-        ((MainActivity)requireActivity()).hideBottomBar();
+
+        if(type == 2){
+//            ((MainActivity)requireActivity()).hideDrawerButton();
+            ((MainActivity)requireActivity()).hideBottomBar();
+        }
         super.onStart();
     }
 

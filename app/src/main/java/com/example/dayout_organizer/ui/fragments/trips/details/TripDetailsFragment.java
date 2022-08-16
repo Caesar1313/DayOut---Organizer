@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import com.example.dayout_organizer.R;
 import com.example.dayout_organizer.helpers.view.FN;
 import com.example.dayout_organizer.helpers.view.NoteMessage;
+import com.example.dayout_organizer.models.trip.PlaceTripData;
 import com.example.dayout_organizer.models.trip.TripData;
 import com.example.dayout_organizer.models.trip.TripDetailsModel;
 import com.example.dayout_organizer.models.tripType.TripType;
@@ -101,8 +102,13 @@ public class TripDetailsFragment extends Fragment {
     TripData tripData;
     int tripId;
     DeleteTripOrPollDialog deleteTripOrPollDialog;
+    int type;
 
-    public TripDetailsFragment(int tripId) {
+    public TripDetailsFragment(int tripId, int type) {
+        // 1 is active
+        // 2 is upcoming
+
+        this.type = type;
         this.tripId = tripId;
     }
 
@@ -123,7 +129,7 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void initViews() {
-        deleteTripOrPollDialog = new DeleteTripOrPollDialog(requireContext(),getString(R.string.deleting_trip));
+        deleteTripOrPollDialog = new DeleteTripOrPollDialog(requireContext(), getString(R.string.deleting_trip));
         deleteTripOrPollDialog.setWarningDialogYes(onYesClicked);
 
         loadingDialog = new LoadingDialog(requireContext());
@@ -188,8 +194,7 @@ public class TripDetailsFragment extends Fragment {
         for (int i = 0; i < types.size(); i++) {
             if (i != 0) {
                 tripTypes += ", " + types.get(i).name;
-            } else if (i == 0)
-                tripTypes += types.get(i).name;
+            } else tripTypes += types.get(i).name;
         }
 
         return tripTypes;
@@ -200,10 +205,18 @@ public class TripDetailsFragment extends Fragment {
         tripDetailsType.setText(getTypes(tripData.types));
         tripDetailsTitle.setText(tripData.title);
         tripDetailsDate.setText(tripData.begin_date);
-        tripDetailsStops.setText(tripData.stopsToDetails);
+        tripDetailsStops.setText(getTripStops(tripData));
         tripDetailsExpireDate.setText(tripData.expire_date);
         tripDetailsPrice.setText(String.valueOf(tripData.price));
         tripsEndBookingDate.setText(tripData.end_booking);
+    }
+
+    private String getTripStops(TripData tripData) {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (PlaceTripData place : tripData.place_trips)
+            stringBuilder.append(place.place.name);
+
+        return stringBuilder.toString();
     }
 
     private void getDataFromApi() {
@@ -250,10 +263,8 @@ public class TripDetailsFragment extends Fragment {
     private final View.OnClickListener onPassengersClicked = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            boolean is = false;
-            if (tripData.isUpcoming)
-                is = true;
-            FN.addFixedNameFadeFragment(MAIN_FRC, requireActivity(), new PassengersListFragment(tripId, is));
+
+            FN.addFixedNameFadeFragment(MAIN_FRC, requireActivity(), new PassengersListFragment(tripId, type == 2));
         }
     };
 

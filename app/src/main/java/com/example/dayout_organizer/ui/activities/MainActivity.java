@@ -174,6 +174,15 @@ public class MainActivity extends AppCompatActivity {
         iNotification = NotificationDataBase.getINSTANCE(this).iNotification();
     }
 
+    public void deleteAllRoomDB(){
+        iPlaces.deleteAll();
+        iPoll.deleteAll();
+        iTrip.deleteAll();
+        iPassengers.deleteAll();
+        iRoadMap.deleteAll();
+        iNotification.deleteAll();
+    }
+
     private void initView() {
         createPollButton.setOnClickListener(onCreatePollClicked);
         createTripButton.setOnClickListener(onCreateTripClicked);

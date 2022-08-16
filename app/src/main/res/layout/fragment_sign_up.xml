@@ -63,7 +63,6 @@
                         android:focusableInTouchMode="true"
                         android:hint="@string/first_name"
                         app:boxBackgroundMode="filled"
-
                         app:hintTextColor="@color/orange_500">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -171,8 +170,6 @@
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:focusableInTouchMode="true"
                         android:hint="@string/email"
-
-
                         app:boxBackgroundMode="filled"
                         app:hintTextColor="@color/orange_500">
 
@@ -217,6 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight=".5"
                             android:fontFamily="@font/acme"
+                            android:checked="true"
                             android:text="@string/male"
                             android:textColor="@color/orange_700"
                             android:textSize="@dimen/_13ssp" />

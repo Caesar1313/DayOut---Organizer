@@ -106,8 +106,18 @@ public interface API {
                                         @Part("description") RequestBody description,
                                         @Part MultipartBody.Part photo);
 
+//    @POST("api/user/organizer/register")
+//    Call<ProfileUser> registerOrganizer(@Body JsonObject profile);
+
+    @Multipart
     @POST("api/user/organizer/register")
-    Call<ProfileUser> registerOrganizer(@Body JsonObject profile);
+    Call<ProfileUser> registerOrganizer(@Part("first_name") RequestBody firstName,
+                                         @Part("last_name") RequestBody lastName,
+                                         @Part("email") RequestBody email,
+                                         @Part("password") RequestBody password,
+                                         @Part("phone_number") RequestBody phoneNumber,
+                                         @Part("gender") RequestBody gender,
+                                         @Part MultipartBody.Part photo);
 
     @POST("api/trip/create")
     Call<TripDetailsModel> createTrip(@Body JsonObject createTrip);

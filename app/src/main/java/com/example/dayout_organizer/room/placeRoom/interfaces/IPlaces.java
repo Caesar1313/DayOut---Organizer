@@ -12,6 +12,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
+import static com.example.dayout_organizer.config.AppConstants.NOTIFICATION_DATA;
 import static com.example.dayout_organizer.config.AppConstants.PLACE_DATA;
 
 
@@ -29,4 +30,8 @@ public interface IPlaces {
 
     @Query("select * from "+ PLACE_DATA+" where id =:placeId")
     Single<PlaceData> getPlaceById(int placeId);
+
+
+    @Query("delete from "+PLACE_DATA)
+    Single<Void>  deleteAll();
 }

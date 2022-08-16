@@ -188,7 +188,7 @@ public class DrawerFragment extends Fragment {
         FN.addFixedNameFadeFragment(MAIN_FRC, requireActivity(), new SuggestionFragment());
     };
     private final View.OnClickListener onPrivacyPoliceClicked = v -> {
-        FN.addFixedNameFadeFragment(MAIN_FRC, requireActivity(), new PrivacyPoliceFragment());
+        FN.addFixedNameFadeFragment(MAIN_FRC, requireActivity(), new PrivacyPolicyFragment(2));
     };
 
     private final View.OnClickListener onLogOutClicked = v -> {

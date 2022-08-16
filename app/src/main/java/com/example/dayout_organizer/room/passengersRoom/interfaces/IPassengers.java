@@ -15,6 +15,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
+import static com.example.dayout_organizer.config.AppConstants.NOTIFICATION_DATA;
 import static com.example.dayout_organizer.config.AppConstants.PASSENGERS_DATA;
 
 
@@ -27,4 +28,7 @@ public interface IPassengers {
 
     @Query("select * from "+ PASSENGERS_DATA)
     Single<List<PassengerData>> getPassengers();
+
+    @Query("delete from "+PASSENGERS_DATA)
+    Single<Void>   deleteAll();
 }

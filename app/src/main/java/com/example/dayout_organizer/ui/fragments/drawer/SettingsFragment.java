@@ -85,6 +85,15 @@ public class SettingsFragment extends Fragment {
                     //language = "AR";
                 }
             }
+            else {
+                if (isChecked) {
+                    ((AuthActivity) requireActivity()).changeLanguage("en", true);
+                    //language = "EN";
+                } else {
+                    ((AuthActivity) requireActivity()).changeLanguage("ar", true);
+                    //language = "AR";
+                }
+            }
         });
     }
     private void openAuthActivity(){

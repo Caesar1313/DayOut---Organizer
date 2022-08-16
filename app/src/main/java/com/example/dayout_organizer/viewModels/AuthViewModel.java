@@ -137,9 +137,11 @@ public class AuthViewModel extends ViewModel {
         });
     }
 
-    public void registerOrganizer(JsonObject model){
+    public void registerOrganizer(RequestBody firstName,RequestBody lastName,RequestBody email,
+                                  RequestBody password,RequestBody phoneNumber,RequestBody gender,
+                                  MultipartBody.Part photo){
         registerMutableLiveData = new MutableLiveData<>();
-        apiClient.getAPI().registerOrganizer(model).enqueue(new Callback<ProfileUser>() {
+        apiClient.getAPI().registerOrganizer(firstName,lastName,email,password,phoneNumber,gender,photo).enqueue(new Callback<ProfileUser>() {
             @Override
             public void onResponse(Call<ProfileUser> call, Response<ProfileUser> response) {
                 if(response.isSuccessful()){

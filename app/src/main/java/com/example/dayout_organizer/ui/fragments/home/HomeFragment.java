@@ -115,6 +115,7 @@ public class HomeFragment extends Fragment {
             loadingDialog.dismiss();
             if (popularPlaceStringPair != null){
                 if (popularPlaceStringPair.first != null){
+                    ((MainActivity)requireActivity()).deleteAllRoomDB();
                     homePlaceAdapter.refresh(popularPlaceStringPair.first.data);
                 }
                 else {
